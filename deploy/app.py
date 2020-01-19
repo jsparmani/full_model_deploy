@@ -36,7 +36,7 @@ def predict():
 
     # input for term to be searched and how many tweets to search
     #searchTerm = input("Enter Keyword/Tag to search about: ")
-  NoOfTerms = 100
+  NoOfTerms = 200
 
     # searching for tweets
   tweets = tweepy.Cursor(api.search, q=searchTerm, lang = "en").items(NoOfTerms)
@@ -48,8 +48,8 @@ def predict():
       pos=pos+1
      else:
       neg=neg+1
-  pos1=(pos/NoOfTerms)*100
-  neg1=(neg/NoOfTerms)*100
+  pos1=(pos/pos+neg)*100
+  neg1=(neg/pos+neg)*100
   objects = ('Positive','Negative')
   y_pos = np.arange(len(objects))
   performance =[pos1,neg1]
