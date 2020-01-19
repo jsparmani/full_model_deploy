@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jan 17 01:43:48 2020
-
-@author: dell
-"""
-
 from flask import Flask,render_template,url_for,request
 from flask import send_file
 import tweepy
@@ -15,6 +8,8 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import io
 import random
 from flask import Response
+import nltk
+nltk.download('vader_lexicon')
 sid_obj = SentimentIntensityAnalyzer()
 pos=0
 neg=0
@@ -35,40 +30,40 @@ def predict():
   auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
   auth.set_access_token(accessToken, accessTokenSecret)
   api = tweepy.API(auth)
-    
+
   global pos , neg
   searchTerm=message
-    
+
     # input for term to be searched and how many tweets to search
     #searchTerm = input("Enter Keyword/Tag to search about: ")
   NoOfTerms = 100
-    
+
     # searching for tweets
   tweets = tweepy.Cursor(api.search, q=searchTerm, lang = "en").items(NoOfTerms)
   for tweet in tweets:
      each=tweet.text
-     sentiment_dict = sid_obj.polarity_scores(each) 
+     sentiment_dict = sid_obj.polarity_scores(each)
      k=sentiment_dict['compound']
      if k>=0:
       pos=pos+1
      else:
       neg=neg+1
   pos1=(pos/NoOfTerms)*100
-  neg1=(neg/NoOfTerms)*100          
+  neg1=(neg/NoOfTerms)*100
   objects = ('Positive','Negative')
   y_pos = np.arange(len(objects))
-  performance =[pos1,neg1] 
+  performance =[pos1,neg1]
   plt.bar(y_pos, performance, align='center', alpha=0.5)
   plt.xticks(y_pos, objects)
   plt.ylabel('% of people')
   plt.title('sentiment')
-  plt.savefig('static/image/new_plot.png')
+  plt.savefig('/home/growwithai/full_model_deploy/deploy/static/image/new_plot.png')
   #plt.savefig('plot.png')
   #output = io.BytesIO()
-  
+
    #mimetype='image/png')
-    
-		
+
+
   return render_template('result.html', name = 'new_plot', url ='static/image/new_plot.png')
 #eturn render_template('untitled1.html', name = plt.show())
 
@@ -80,4 +75,4 @@ def get_image():
        filename = 'error.gif'
     return send_file(filename, mimetype='image/gif')"""
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run()
