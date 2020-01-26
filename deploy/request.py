@@ -15,7 +15,6 @@ sid_obj = SentimentIntensityAnalyzer()
 pos=0
 neg=0
 app = Flask(__name__)
-url = 'http://localhost:5000/predict_api'
 
 @app.route('/predict_api/', methods=["GET","POST"])
 def predict_api():
